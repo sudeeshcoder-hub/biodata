@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Company Bio-Data Form</title>
+    <style>
+        
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(-45deg, #ff9a9e, #fad0c4, #fbc2eb, #a1c4fd);
+            background-size: 400% 400%;
+            animation: gradientBG 10s ease infinite;
+        }
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.2);
+            animation: fadeIn 1.5s ease;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        
+        h1 {
+            text-align: center;
+            color: darkcyan;
+            animation: floatText 3s ease-in-out infinite;
+        }
+        @keyframes floatText {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+
+        p {
+            color: DarkOrchid;
+            text-align: center;
+        }
+
+        h2 {
+            text-align: center;
+            color: blue;
+        }
+
+        
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            margin-top: 10px;
+            font-weight: bold;
+            opacity: 0;
+            animation: slideIn 0.8s forwards;
+        }
+
+        
+        input, textarea {
+            opacity: 0;
+            transform: translateX(-20px);
+            animation: slideIn 0.8s forwards;
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        @keyframes slideIn {
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        
+        input:focus, textarea:focus {
+            border-color: #ff6ec4;
+            box-shadow: 0 0 8px rgba(255, 110, 196, 0.6);
+            transform: scale(1.02);
+        }
+
+        
+        input[type="submit"] {
+            margin-top: 20px;
+            padding: 12px;
+            background: linear-gradient(45deg, #007bff, #00c6ff);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        input[type="submit"]:hover {
+            background: linear-gradient(45deg, #ff6ec4, #7873f5);
+            box-shadow: 0 0 15px rgba(255, 110, 196, 0.7);
+            transform: scale(1.05);
+        }
+
+        
+        label:nth-of-type(1), #name { animation-delay: 0.2s; }
+        label:nth-of-type(2), #dob { animation-delay: 0.4s; }
+        label:nth-of-type(3), #email { animation-delay: 0.6s; }
+        label:nth-of-type(4), #phone { animation-delay: 0.8s; }
+        label:nth-of-type(5), #address { animation-delay: 1s; }
+        label:nth-of-type(6), #education { animation-delay: 1.2s; }
+        label:nth-of-type(7), #skills { animation-delay: 1.4s; }
+        label:nth-of-type(8), #experience { animation-delay: 1.6s; }
+        label:nth-of-type(9), #salary { animation-delay: 1.8s; }
+        label:nth-of-type(10), #position { animation-delay: 2s; }
+        input[type="submit"] { animation-delay: 2.2s; }
+
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            color: white;
+        }
+        .footer a {
+            color: blue;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        .footer a:hover {
+            color: #ff6ec4;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+  <h1>Welcome to Our Company</h1>
+  <form id="biodataForm" method="POST">
+    <label>Full Name:</label>
+    <input type="text" name="name" required><br><br>
+
+    <label>Date of Birth:</label>
+    <input type="date" name="dob" required><br><br>
+
+    <label>Email:</label>
+    <input type="email" name="email" required><br><br>
+
+    <label>Phone:</label>
+    <input type="tel" name="phone" required><br><br>
+
+    <label>Address:</label>
+    <textarea name="address" required></textarea><br><br>
+
+    <label>Education:</label>
+    <input type="text" name="education" required><br><br>
+
+    <label>Skills:</label>
+    <textarea name="skills" required></textarea><br><br>
+
+    <label>Experience (Years):</label>
+    <input type="number" name="experience" required><br><br>
+
+    <label>Expected Salary:</label>
+    <input type="text" name="salary" required><br><br>
+
+    <label>Position Applied For:</label>
+    <input type="text" name="position" required><br><br>
+
+    <input type="submit" value="Submit Bio-Data">
+  </form>
+</div>
+
+<script>
+document.getElementById("biodataForm").addEventListener("submit", async function(e) {
+  e.preventDefault(); // prevent page reload
+
+  const formData = Object.fromEntries(new FormData(this).entries());
+
+  let res = await fetch("https://bio-data-form.vercel.app/api/submit", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(formData)
+  });
+let data = await res.json();
+if (res.ok) {
+  alert(data.message || "Form submitted successfully! Check your email for confirmation.");
+} else {
+  alert(data.message || "Something went wrong. Please try again.");
+}
+
+
+});
+</script>
+
+</body>
+</html>
+
